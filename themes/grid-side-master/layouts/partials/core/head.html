@@ -1,0 +1,40 @@
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="{{ with .Site.Params.name }}{{ . }}{{ end }}">
+    <meta name="description" content="{{ with .Site.Params.description }}{{ . }}{{ end }}">
+    {{ if .RSSlink }}
+      <link href="{{ .RSSlink }}" rel="alternate" type="application/rss+xml" title="{{ .Site.Title }}" />
+      <link href="{{ .RSSlink }}" rel="feed" type="application/rss+xml" title="{{ .Site.Title }}" />
+    {{ end }}
+    {{ .Hugo.Generator }}
+    <meta name="generation-date" content="{{ .Now }}">
+    <title>{{ .Title }} &middot; {{ .Site.Title }}</title>
+    <link rel="shortcut icon" href="{{ .Site.BaseURL }}img/favicon.ico">
+    <link rel="icon" href="{{ .Site.BaseURL }}img/favicon.ico">
+    {{ partial "core/css.html" . }}
+    <script src="{{ .Site.BaseURL }}js/modernizr-latest.js"></script>
+    <script src="{{ .Site.BaseURL }}js/lazysizes.min.js"></script>
+    <script src="{{ .Site.BaseURL }}js/ls.noscript.min.js"></script>
+    
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+    <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+
+    <script>
+        window.lazySizesConfig = window.lazySizesConfig || {};
+        lazySizesConfig.addClasses = true;
+        lazySizesConfig.loadMode = 2;
+    </script>
+
+    {{ with .Params.redirect }}
+        <!-- Attempt redirect through refresh -->
+        <meta http-equiv="refresh" content="1; url={{ . }}">
+ 
+        <script>
+            // Meta-refresh failed, so attempt Javascript
+            window.location.href = "{{ . }}"
+        </script> 
+    {{ end }}
+</head>
+

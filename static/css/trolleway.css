@@ -1,0 +1,20 @@
+﻿
+
+.photosphere{
+
+	background-color: black;
+    background: radial-gradient(ellipse farthest-corner at 45px 45px , #000000 0%, #FFFFFF 50%, #000000 95%);
+
+cursor: crosshair;
+margin: 0 auto;
+ text-align: center;
+
+
+
+}
+
+.photospher0e::before { 
+    content: "Сферическая панорама";
+}
+
+.ia {background-color:lightgray; margin: 2em 0em;}

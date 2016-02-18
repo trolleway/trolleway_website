@@ -1,0 +1,37 @@
+
+{{ $baseUrl := $.Site.BaseURL }}
+{{ if isset .Params "image" }}
+    {{ $.Scratch.Set "image" .Params.image }}
+{{ else }}
+    {{ $.Scratch.Set "image" "/img/placeholder.jpg" }}
+{{ end }}
+{{ $image := $.Scratch.Get "image" | urlize }}
+{{ $title := .Title }}
+{{ $summary := .Summary }}
+{{ $link := .Permalink }}
+<!-- TODO: Figure out why line height causes issues here -->
+<div class="flex-item flex-item-spacing no-line-height">
+    <div class="relative lazyload" data-noscript="">
+        <noscript>
+            <a href="{{ $link }}">
+                <div class="project-container rounded-corners z-depth-1">
+                    <div class="project-container-image rounded-corners-top">
+                        {{ if or (or (isset .Params "video_mp4") (isset .Params "video_ogv")) (or (isset .Params "video_webm") (isset .Params "video_3gp")) }}
+                            {{ .Scratch.Set "class" "rounded-corners-top fill-container-width" }}
+                            {{ partial "extra/video.html" . }}
+                        {{ else }}
+                            <img src="{{ $baseUrl }}{{ $image }}" class="fill-container-width rounded-corners-top" />
+                        {{ end }}
+                    </div>
+                    <div class="rounded-corners-bottom center-text project-container-title">
+                        <h4 class="white-text">{{ $title }}</h4>
+                        {{ partial "extra/categories.html" . }}
+                        <span class="separator">|</span>
+                        {{ partial "extra/tags.html" . }}
+                    </div>
+                </div>
+            </a>
+        </noscript>
+    </div>
+</div>
+

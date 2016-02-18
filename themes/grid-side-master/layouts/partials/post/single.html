@@ -1,0 +1,120 @@
+{{ partial "core/html-start.html" . }}
+
+{{ partial "core/head.html" . }}
+
+<body class="page-colors minimum-viewport-height">
+    {{ partial "core/main-menu.html" . }}
+
+    <div class="main-content">
+        <div class="center-space">
+            <div class="article-colors">
+                {{ with .Params.image }}
+                    <img src="{{ . }}" class="fill-container-width"></img>
+                {{ end }}
+                <article>
+                    <header>
+                        <h1 class="article-title">{{ .Title }}</h1>
+                        <time class="date-color">{{ .Date.Format "Mon Jan 02, 2006" }}</time>
+                        <span class="separator">|</span>
+                        {{ partial "extra/categories.html" . }}
+                        <span class="separator">|</span>
+                        {{ partial "extra/tags.html" . }}
+                    </header>
+
+                    <hr>
+
+                    <section>
+                        {{ with .Params.redirect }}
+                            <p>If you are not redirected automatically, follow the <a href="{{ . }}">link</a>.</p>
+                        {{ else }}
+                            <!-- begin leaflet -->
+                            {{ if .Params.geojson }}
+    <div id="map{{.Title}}"  style="width: 400 px; height: 400px"></div>
+    <script>
+		var map = L.map('map{{.Title}}',{scrollWheelZoom : false,dragging : false, zoomControl:false }).setView([55.666, 37.666], 9);
+        map.dragging.disable();
+        map.touchZoom.disable();
+        map.doubleClickZoom.disable();
+        map.scrollWheelZoom.disable();
+        map.boxZoom.disable();
+        //map.tap.disable();
+        map.keyboard.disable();
+        map.zoomControl=false;
+        if (map.tap) map.tap.disable();
+        document.getElementById('map{{.Title}}').style.cursor='default';
+
+L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+
+var article_geom = {
+    "type": "Feature",
+    "properties": {
+        "popupContent": "",
+        "style": {
+            weight: 2,
+            color: "red",
+            opacity: 1,
+            fillColor: "orange",
+            fillOpacity: 0.2
+        }
+    },
+    "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [{{ .Params.geojson | safeJS }}]
+    }
+};
+		function onEachFeature(feature, layer) {
+			var popupContent = "<p>I started out as a GeoJSON " +
+					feature.geometry.type + ", but now I'm a Leaflet vector!</p>";
+
+			if (feature.properties && feature.properties.popupContent) {
+				popupContent += feature.properties.popupContent;
+			}
+
+			//layer.bindPopup(popupContent);
+		}
+
+		var featureLayer = L.geoJson([article_geom], {
+
+			style: function (feature) {
+				return feature.properties && feature.properties.style;
+			},
+
+			onEachFeature: onEachFeature,
+
+			pointToLayer: function (feature, latlng) {
+				return L.circleMarker(latlng, {
+					radius: 8,
+					fillColor: "#ff7800",
+					color: "#000",
+					weight: 1,
+					opacity: 1,
+					fillOpacity: 0.8
+				});
+			}
+		}).addTo(map);
+        
+        map.fitBounds(featureLayer.getBounds(),{maxZoom : 14});
+    </script>
+    {{ end }}
+    <!-- end leaflet -->
+                            {{ .Content }}
+                        {{ end }}
+                    </section>
+
+                    <footer class="right-align">
+                        <p><small>{{ .Site.Copyright | markdownify }}</small></p>
+                    </footer>
+
+                    {{ partial "extra/disqus.html" . }}
+                </article>
+            </div>
+        </div>
+    </div>
+
+    {{ partial "core/js.html" . }}
+</body>
+
+{{ partial "core/html-end.html" . }}
+

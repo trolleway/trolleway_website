@@ -1,0 +1,45 @@
+{{ partial "core/html-start.html" . }}
+{{ partial "core/head.html" . }}
+
+<body>
+	<!--<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script> list.html-->
+
+    {{ partial "core/main-menu.html" . }}
+
+    {{ $sp := .Site.Params }}
+    {{ if and (isset $sp "Post") (isset $sp.Post "infinite_scroll") }}
+        {{ with $sp.Post.infinite_scroll }}
+            {{ $.Scratch.Set "infinite_scroll" (eq . true) }}
+        {{ end }}
+    {{ else }}
+        {{ $.Scratch.Set "infinite_scroll" false }}
+    {{ end }}
+
+    {{ if eq ($.Scratch.Get "infinite_scroll") false }}
+        {{ with $sp.infinite_scroll }}
+            {{ $.Scratch.Set "infinite_scroll" (eq . true) }}
+        {{ else }}
+            {{ $.Scratch.Set "infinite_scroll" false }}
+        {{ end }}
+    {{ end }}
+
+    {{ $infinite_scroll := $.Scratch.Get "infinite_scroll" }}
+
+    <section class="main-content">
+        <ul><div class="masonry-flex-container {{ if $infinite_scroll }}infinite-scroll{{ end }}">
+            {{ if .IsNode }}
+                {{ range .Paginator.Pages }}
+                    <li><div class="_flex-item">
+                        {{ partial "post/page-item.html" . }}
+                    </div></li>
+                {{ end }}
+            {{ end }}
+        </div></ul>
+        {{ partial "extra/pagination.html" . }}
+    </section>
+
+    {{ partial "core/js.html" . }}
+</body>
+
+{{ partial "core/html-end.html" . }}
+
