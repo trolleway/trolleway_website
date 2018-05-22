@@ -1,6 +1,6 @@
-baseurl = "http://5etazki.ru/"
+baseurl = "https://trolleway.github.io/"
 languageCode = "ru"
-title = "Снос пятиэтажек в Москве"
+title = "trolleway"
 theme = "grid-side-master"
 
 # =========== GRID-THEME config part 
