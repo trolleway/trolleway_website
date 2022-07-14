@@ -1,4 +1,9 @@
 # 5etazki
+
+replaced to github.com/trolleway/trolleway.github.io/
+
+# Description
+
 Исходный код сайта trolleway.github.io. Код для генератора статических сайтов hugo.
 
 Это исходный код сайта: trolleway.github.io
